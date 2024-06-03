@@ -20,13 +20,19 @@ function launchModal() {
   modalbg.style.display = "block";
 }
 
-// close modal form
+/**
+ * Permet de fermer la fenêtre modal (formulaire)
+ */
 const closeModal = () => {
   deleteErrors();
   modalbg.style.display = "none";
 }
 
-
+/**
+ * Permet de récupérer la valeur du radiobutton checké
+ * @param name Nom des radiobutton
+ * @returns Retourne la valeur du radiobutton sélectionné
+ */
 const displayRadioValue=(name)=> {
   let ele = document.getElementsByName(name);
 
@@ -38,8 +44,11 @@ const displayRadioValue=(name)=> {
   }
 }
 
+/**
+ * Effacer les messages d'erreurs précédent
+ */
 const deleteErrors = ()=>{
-   //Effacer les messages d'erreurs précédent
+   
    document.getElementById("first-error").textContent = "";
    document.getElementById("last-error").textContent = "";
    document.getElementById("email-error").textContent = "";
@@ -47,12 +56,15 @@ const deleteErrors = ()=>{
    document.getElementById("quantity-error").textContent = "";
 }
 
+/**
+ * Permet de verifier si tous les requis sont bien remplis, puis retourne la liste des valeurs
+ * @param event Récupération de l'evenement au clic
+ */
 const validate = (event) => {
 
   event.preventDefault();
 
   let isValid = true;
-
 
   const firstName = document.getElementById("first");
   const lastName = document.getElementById("last");
@@ -74,7 +86,6 @@ const validate = (event) => {
 
   console.log("condition: ", checkbox1.value);
   console.log("events: ", checkbox2.value);
-
 
 
   if (firstName.value.trim() === "") {
