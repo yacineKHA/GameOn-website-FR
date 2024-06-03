@@ -24,7 +24,7 @@ function launchModal() {
  * Permet de fermer la fenêtre modal (formulaire)
  */
 const closeModal = () => {
-  deleteErrors();
+  deleteErrorsMessages();
   modalbg.style.display = "none";
 }
 
@@ -47,7 +47,7 @@ const displayRadioValue=(name)=> {
 /**
  * Effacer les messages d'erreurs précédent
  */
-const deleteErrors = ()=>{
+const deleteErrorsMessages = ()=>{
    
    document.getElementById("first-error").textContent = "";
    document.getElementById("last-error").textContent = "";
@@ -75,12 +75,13 @@ const validate = (event) => {
   const checkbox1 = document.getElementById("checkbox1");
   const checkbox2 = document.getElementById("checkbox2");
 
-
   console.log("firstname: ", firstName.value);
   console.log("lastname: ", lastName.value);
   console.log("email: ", email.value);
   console.log("birthday: ", birthdate.value);
   console.log("quantity: ", quantity.value);
+
+  deleteErrorsMessages();
 
   let locationValue = displayRadioValue("location");
 
@@ -88,13 +89,13 @@ const validate = (event) => {
   console.log("events: ", checkbox2.value);
 
 
-  if (firstName.value.trim() === "") {
-    document.getElementById("first-error").textContent = "Veuillez entrer votre prénom.";
+  if (firstName.value.trim().length < 2) {
+    document.getElementById("first-error").textContent = "Veuillez entrer 2 caractères ou plus pour le champ du prénom.";
     isValid = false;
   }
 
-  if (lastName.value.trim() === "") {
-    document.getElementById("last-error").textContent = "Veuillez entrer votre nom.";
+  if (lastName.value.trim().length < 2) {
+    document.getElementById("last-error").textContent = "Veuillez entrer 2 caractères ou plus pour le champ du nom.";
     isValid = false;
   }
 
@@ -105,7 +106,7 @@ const validate = (event) => {
   }
 
   if (birthdate.value === "") {
-    document.getElementById("birthdate-error").textContent = "Veuillez entrer votre date de naissance.";
+    document.getElementById("birthdate-error").textContent = "Vous devez entrer votre date de naissance.";
     isValid = false;
   }
 
@@ -114,18 +115,18 @@ const validate = (event) => {
     isValid = false;
   }
 
-  if (!location) {
-    document.getElementById("location-error").textContent = "Veuillez choisir une localisation";
+  if (!locationValue) {
+    document.getElementById("location-error").textContent = "Vous devez choisir une option.";
     isValid = false;
   }
 
   if (!checkbox1.checked) {
-    alert("Vous devez accepter les conditions d'utilisation.");
+    alert("Vous devez vérifier que vous acceptez les termes et conditions.");
     isValid = false;
   }
 
   if (isValid) {
-    deleteErrors();
+    deleteErrorsMessages();
     console.log("Données valides: ",firstName.value, lastName.value, email.value, birthdate.value, quantity.value, locationValue, checkbox1.checked);
   }
 }
