@@ -54,6 +54,8 @@ const deleteErrorsMessages = ()=>{
    document.getElementById("email-error").textContent = "";
    document.getElementById("birthdate-error").textContent = "";
    document.getElementById("quantity-error").textContent = "";
+   document.getElementById("location-error").textContent = "";
+
 }
 
 /**
@@ -127,8 +129,13 @@ const validate = (event) => {
 
   if (isValid) {
     deleteErrorsMessages();
+    const form = document.querySelector(".modal-body");
+    const validDiv = document.querySelector(".validate");
+    form.style.display = "none";
+    validDiv.style.display = "flex";
     console.log("Données valides: ",firstName.value, lastName.value, email.value, birthdate.value, quantity.value, locationValue, checkbox1.checked);
   }
+  
 }
 
 
