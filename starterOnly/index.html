@@ -54,13 +54,13 @@
 
       <div class="bground">
         <div class="content">
-          <span class="close"></span>
+          <span onclick="closeModal();" class="close"></span>
           <div class="modal-body">
             <form
               name="reserve"
               action="index.html"
               method="get"
-              onsubmit="return validate();"
+              onsubmit="return validate(event);"
             >
               <div
                 class="formData">
@@ -72,6 +72,8 @@
                   name="first"
                   minlength="2"
                 /><br>
+                <span class="error-message" id="first-error"></span>
+
               </div>
               <div
                 class="formData">
@@ -82,6 +84,7 @@
                   id="last"
                   name="last"
                 /><br>
+                <span class="error-message" id="last-error"></span>
               </div>
               <div
                 class="formData">
@@ -92,6 +95,7 @@
                   id="email"
                   name="email"
                 /><br>
+                <span class="error-message" id="email-error"></span>
               </div>
               <div
                 class="formData">
@@ -102,11 +106,13 @@
                   id="birthdate"
                   name="birthdate"
                 /><br>
+                <span class="error-message" id="birthdate-error"></span>
               </div>
               <div
                 class="formData">
                 <label>À combien de tournois GameOn avez-vous déjà participé ?</label><br>
                 <input type="number" class="text-control" id="quantity" name="quantity" min="0" max="99">
+                <span class="error-message" id="quantity-error"></span>
               </div>
               <p class="text-label">A quel tournoi souhaitez-vous participer cette année ?</p>
               <div
@@ -178,6 +184,7 @@
                   Portland</label
                 >
               </div>
+              <span class="error-message" id="location-error"></span>
 
               <div
                 class="formData">
@@ -195,7 +202,7 @@
                 <input class="checkbox-input" type="checkbox" id="checkbox2" />
                 <label class="checkbox2-label" for="checkbox2">
                   <span class="checkbox-icon"></span>
-                  Je Je souhaite être prévenu des prochains évènements.
+                  Je souhaite être prévenu des prochains évènements.
                 </label>
                 <br>
               </div>

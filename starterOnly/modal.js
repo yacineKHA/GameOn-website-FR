@@ -20,4 +20,106 @@ function launchModal() {
   modalbg.style.display = "block";
 }
 
+// close modal form
+const closeModal = () => {
+  deleteErrors();
+  modalbg.style.display = "none";
+}
+
+
+const displayRadioValue=(name)=> {
+  let ele = document.getElementsByName(name);
+
+  for (i = 0; i < ele.length; i++) {
+    if (ele[i].checked) {
+      console.log("location: ", ele[i].value)
+      return ele[i].value;
+    }
+  }
+}
+
+const deleteErrors = ()=>{
+   //Effacer les messages d'erreurs précédent
+   document.getElementById("first-error").textContent = "";
+   document.getElementById("last-error").textContent = "";
+   document.getElementById("email-error").textContent = "";
+   document.getElementById("birthdate-error").textContent = "";
+   document.getElementById("quantity-error").textContent = "";
+}
+
+const validate = (event) => {
+
+  event.preventDefault();
+
+  let isValid = true;
+
+
+  const firstName = document.getElementById("first");
+  const lastName = document.getElementById("last");
+  const email = document.getElementById("email");
+  const birthdate = document.getElementById("birthdate");
+  const quantity = document.getElementById("quantity");
+  const location = document.getElementsByName('location');
+  const checkbox1 = document.getElementById("checkbox1");
+  const checkbox2 = document.getElementById("checkbox2");
+
+
+  console.log("firstname: ", firstName.value);
+  console.log("lastname: ", lastName.value);
+  console.log("email: ", email.value);
+  console.log("birthday: ", birthdate.value);
+  console.log("quantity: ", quantity.value);
+
+  let locationValue = displayRadioValue("location");
+
+  console.log("condition: ", checkbox1.value);
+  console.log("events: ", checkbox2.value);
+
+
+
+  if (firstName.value.trim() === "") {
+    document.getElementById("first-error").textContent = "Veuillez entrer votre prénom.";
+    isValid = false;
+  }
+
+  if (lastName.value.trim() === "") {
+    document.getElementById("last-error").textContent = "Veuillez entrer votre nom.";
+    isValid = false;
+  }
+
+  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  if (!emailPattern.test(email.value)) {
+    document.getElementById("email-error").textContent = "Veuillez entrer une adresse email valide.";
+    isValid = false;
+  }
+
+  if (birthdate.value === "") {
+    document.getElementById("birthdate-error").textContent = "Veuillez entrer votre date de naissance.";
+    isValid = false;
+  }
+
+  if (quantity.value === "" || quantity.value < 0 || quantity.value > 99) {
+    document.getElementById("quantity-error").textContent = "Veuillez entrer une quantité valide (0-99).";
+    isValid = false;
+  }
+
+  if (!location) {
+    document.getElementById("location-error").textContent = "Veuillez choisir une localisation";
+    isValid = false;
+  }
+
+  if (!checkbox1.checked) {
+    alert("Vous devez accepter les conditions d'utilisation.");
+    isValid = false;
+  }
+
+  if (isValid) {
+    deleteErrors();
+    console.log("Données valides: ",firstName.value, lastName.value, email.value, birthdate.value, quantity.value, locationValue, checkbox1.checked);
+  }
+}
+
+
+
+
 
