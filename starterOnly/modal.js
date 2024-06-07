@@ -55,7 +55,7 @@ const deleteErrorsMessages = ()=>{
    document.getElementById("birthdate-error").textContent = "";
    document.getElementById("quantity-error").textContent = "";
    document.getElementById("location-error").textContent = "";
-
+   document.getElementById("conditions-error").textContent = "";
 }
 
 /**
@@ -73,7 +73,6 @@ const validate = (event) => {
   const email = document.getElementById("email");
   const birthdate = document.getElementById("birthdate");
   const quantity = document.getElementById("quantity");
-  const location = document.getElementsByName('location');
   const checkbox1 = document.getElementById("checkbox1");
   const checkbox2 = document.getElementById("checkbox2");
 
@@ -118,12 +117,12 @@ const validate = (event) => {
   }
 
   if (!locationValue) {
-    document.getElementById("location-error").textContent = "Vous devez choisir une option.";
+    document.getElementById("location-error").textContent = "Veuillez sélectionner une ville.";
     isValid = false;
   }
 
   if (!checkbox1.checked) {
-    alert("Vous devez vérifier que vous acceptez les termes et conditions.");
+    document.getElementById("conditions-error").textContent = "Veuillez accepter les conditions d'utilisation.";
     isValid = false;
   }
 
