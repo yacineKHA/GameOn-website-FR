@@ -29,6 +29,16 @@ const fields = [
   { elementId: "quantity", errorId: "quantity-error" }
 ];
 
+const filedsForValidators = [
+  { elementId: "first", errorId: "first-error" },
+  { elementId: "last", errorId: "last-error" },
+  { elementId: "email", errorId: "email-error" },
+  { elementId: "birthdate", errorId: "birthdate-error" },
+  { elementId: "quantity", errorId: "quantity-error" },
+  { elementId: "checkbox1", errorId: "conditions-error" },
+  { elementId: "location", errorId: "location-error" }
+]
+
 // Liste des élément pour la suppression des messages d'erreurs
 const listOfElementForErrorsMessages = [
   "first-error",
@@ -57,18 +67,19 @@ const closeModal = () => {
 }
 
 /**
- * Permet de récupérer la valeur du radiobutton checké
+ * Permet de récupérer le radiobutton checké
  * @param name Nom des radiobutton
- * @returns Retourne la valeur du radiobutton sélectionné
+ * @returns Retourne le radiobutton sélectionné
  */
 const displayRadioValue = (name) => {
   let element = document.getElementsByName(name);
 
   for (i = 0; i < element.length; i++) {
     if (element[i].checked) {
-      return element[i].value;
+      return element[i];
     }
   }
+  return null;
 }
 
 /**
@@ -84,51 +95,50 @@ const deleteErrorsMessages = (errorId) => {
   });
 }
 
+const errorMessages = {
+  first: "Veuillez entrer 2 caractères ou plus pour le champ du prénom.",
+  last: "Veuillez entrer 2 caractères ou plus pour le champ du nom.",
+  email: "Veuillez entrer une adresse email valide.",
+  birthdate: "Vous devez entrer votre date de naissance.",
+  quantity: "Veuillez entrer une quantité valide (0-99).",
+  checkbox1: "Veuillez accepter les conditions d'utilisation.",
+  location: "Veuillez sélectionner une ville."
+};
+
+const validators = {
+  first: value => value.trim().length >= 2,
+  last: value => value.trim().length >= 2,
+  email: value => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value),
+  birthdate: value => value !== "",
+  quantity: value => value !== "" && value >= 0 && value <= 99,
+  checkbox1: element => element.checked,
+  location: () => displayRadioValue("location") !== null
+};
+
 /**
  * Permet de vérifier les champs
  * @param element L'élément à vérifier
  * @param errorId L'ID du span correspondant
  */
 const isFieldValid = (element, errorId) => {
-  let isValid = true;
-  let errorMessage = '';
+  let validator;
+  let isValid;
 
-  switch (element.id) {
-    case 'first':
-      if (element.value.trim().length < 2) {
-        errorMessage = "Veuillez entrer 2 caractères ou plus pour le champ du prénom.";
-        isValid = false;
-      }
-      break;
-    case 'last':
-      if (element.value.trim().length < 2) {
-        errorMessage = "Veuillez entrer 2 caractères ou plus pour le champ du nom.";
-        isValid = false;
-      }
-      break;
-    case 'email':
-      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-      if (!emailPattern.test(element.value)) {
-        errorMessage = "Veuillez entrer une adresse email valide.";
-        isValid = false;
-      }
-      break;
-    case 'birthdate':
-      if (element.value === "") {
-        errorMessage = "Vous devez entrer votre date de naissance.";
-        isValid = false;
-      }
-      break;
-    case 'quantity':
-      if (element.value === "" || element.value < 0 || element.value > 99) {
-        errorMessage = "Veuillez entrer une quantité valide (0-99).";
-        isValid = false;
-      }
-      break;
-    default:
-      break;
+  if (!element) {
+    validator = validators["location"];
+    isValid = validator();
+  } else if (element.type === 'checkbox') {
+    validator = validators[element.id];
+    isValid = validator(element);
+  } else if (element.type === 'radio') {
+    validator = validators["location"];
+    isValid = validator();
+  } else {
+    validator = validators[element.id];
+    isValid = validator(element.value);
   }
 
+  let errorMessage = isValid ? '' : errorMessages[element ? element.id : "location"] || '';
   document.getElementById(errorId).textContent = errorMessage;
   return isValid;
 };
@@ -138,6 +148,7 @@ const isFieldValid = (element, errorId) => {
  * @param fileds tableau de champs de type [nom-element, nom-erreur]
  */
 const isFieldValidWhenBlur = (fields) => {
+  console.log(fields);
   fields.forEach((field) => {
     const element = document.getElementById(field.elementId);
     element.addEventListener("blur", () => isFieldValid(element, field.errorId));
@@ -154,31 +165,25 @@ const validate = (event) => {
 
   event.preventDefault();
 
+  console.log("radiobutton: ", displayRadioValue("location"));
   let isValid = true;
 
   deleteErrorsMessages(listOfElementForErrorsMessages);
 
-  fields.forEach((field) => {
+  filedsForValidators.forEach((field) => {
     const element = document.getElementById(field.elementId);
-    isValid = isFieldValid(element, field.errorId) && isValid
+    if (field.elementId === "location") {
+      isValid = isFieldValid(displayRadioValue("location"), field.errorId) && isValid
+    } else {
+      isValid = isFieldValid(element, field.errorId) && isValid
+    }
   });
-
-  if (!checkbox1.checked) {
-    document.getElementById("conditions-error").textContent = "Veuillez accepter les conditions d'utilisation.";
-    isValid = false;
-  }
-
-  let locationValue = displayRadioValue("location");
-
-  if (!locationValue) {
-    document.getElementById("location-error").textContent = "Veuillez sélectionner une ville.";
-    isValid = false;
-  }
 
   if (isValid) {
     deleteErrorsMessages(listOfElementForErrorsMessages);
     form.style.display = "none";
     validDiv.style.display = "flex";
+    const locationValue = displayRadioValue("location")?.value
     console.log("Données valides: ", firstName.value, lastName.value, email.value, birthdate.value, quantity.value, locationValue, checkbox1.checked);
   }
 }
