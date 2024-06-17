@@ -21,7 +21,6 @@ const quantity = document.getElementById("quantity");
 const checkbox1 = document.getElementById("checkbox1");
 const checkbox2 = document.getElementById("checkbox2");
 
-//
 const fields = [
   { elementId: "first", errorId: "first-error" },
   { elementId: "last", errorId: "last-error" },
@@ -63,12 +62,11 @@ const closeModal = () => {
  * @returns Retourne la valeur du radiobutton sélectionné
  */
 const displayRadioValue = (name) => {
-  let ele = document.getElementsByName(name);
+  let element = document.getElementsByName(name);
 
-  for (i = 0; i < ele.length; i++) {
-    if (ele[i].checked) {
-      console.log("location: ", ele[i].value)
-      return ele[i].value;
+  for (i = 0; i < element.length; i++) {
+    if (element[i].checked) {
+      return element[i].value;
     }
   }
 }
@@ -85,8 +83,6 @@ const deleteErrorsMessages = (errorId) => {
     }
   });
 }
-
-
 
 /**
  * Permet de vérifier les champs
@@ -139,7 +135,7 @@ const isFieldValid = (element, errorId) => {
 
 /**
  * Permet de verifier si le champs est valide lors du blur
- * @param fileds tableau de champs [nom-element, nom-erreur]
+ * @param fileds tableau de champs de type [nom-element, nom-erreur]
  */
 const isFieldValidWhenBlur = (fields) => {
   fields.forEach((field) => {
@@ -162,16 +158,17 @@ const validate = (event) => {
 
   deleteErrorsMessages(listOfElementForErrorsMessages);
 
+  fields.forEach((field) => {
+    const element = document.getElementById(field.elementId);
+    isValid = isFieldValid(element, field.errorId) && isValid
+  });
+
+  if (!checkbox1.checked) {
+    document.getElementById("conditions-error").textContent = "Veuillez accepter les conditions d'utilisation.";
+    isValid = false;
+  }
+
   let locationValue = displayRadioValue("location");
-
-  console.log("condition: ", checkbox1.value);
-  console.log("events: ", checkbox2.value);
-
-  if (!isFieldValid(firstName, "first-error")) isValid = false;
-  if (!isFieldValid(lastName, "last-error")) isValid = false;
-  if (!isFieldValid(email, "email-error")) isValid = false;
-  if (!isFieldValid(birthdate, "birthdate-error")) isValid = false;
-  if (!isFieldValid(quantity, "quantity-error")) isValid = false;
 
   if (!locationValue) {
     document.getElementById("location-error").textContent = "Veuillez sélectionner une ville.";
