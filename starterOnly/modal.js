@@ -26,29 +26,13 @@ const fields = [
   { elementId: "last", errorId: "last-error" },
   { elementId: "email", errorId: "email-error" },
   { elementId: "birthdate", errorId: "birthdate-error" },
-  { elementId: "quantity", errorId: "quantity-error" }
-];
-
-const filedsForValidators = [
-  { elementId: "first", errorId: "first-error" },
-  { elementId: "last", errorId: "last-error" },
-  { elementId: "email", errorId: "email-error" },
-  { elementId: "birthdate", errorId: "birthdate-error" },
   { elementId: "quantity", errorId: "quantity-error" },
   { elementId: "checkbox1", errorId: "conditions-error" },
   { elementId: "location", errorId: "location-error" }
-]
+];
 
 // Liste des élément pour la suppression des messages d'erreurs
-const listOfElementForErrorsMessages = [
-  "first-error",
-  "last-error",
-  "email-error",
-  "birthdate-error",
-  "quantity-error",
-  "location-error",
-  "conditions-error"
-];
+const listOfElementForErrorsMessages = fields.map(field => field.errorId);
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -124,15 +108,12 @@ const isFieldValid = (element, errorId) => {
   let validator;
   let isValid;
 
-  if (!element) {
+  if (!element || element.type === 'radio') {
     validator = validators["location"];
     isValid = validator();
   } else if (element.type === 'checkbox') {
     validator = validators[element.id];
     isValid = validator(element);
-  } else if (element.type === 'radio') {
-    validator = validators["location"];
-    isValid = validator();
   } else {
     validator = validators[element.id];
     isValid = validator(element.value);
@@ -145,17 +126,18 @@ const isFieldValid = (element, errorId) => {
 
 /**
  * Permet de verifier si le champs est valide lors du blur
- * @param fileds tableau de champs de type [nom-element, nom-erreur]
+ * @param fields tableau de champs de type [nom-element, nom-erreur]
  */
 const isFieldValidWhenBlur = (fields) => {
-  console.log(fields);
   fields.forEach((field) => {
     const element = document.getElementById(field.elementId);
     element.addEventListener("blur", () => isFieldValid(element, field.errorId));
   })
 }
 
-isFieldValidWhenBlur(fields);
+// filtre de la liste fields
+const fieldsForBlur = fields.filter(field => !["checkbox1", "location"].includes(field.elementId));
+isFieldValidWhenBlur(fieldsForBlur);
 
 /**
  * Permet de verifier si tous les requis sont bien remplis, puis retourne la liste des valeurs
@@ -165,12 +147,11 @@ const validate = (event) => {
 
   event.preventDefault();
 
-  console.log("radiobutton: ", displayRadioValue("location"));
   let isValid = true;
 
   deleteErrorsMessages(listOfElementForErrorsMessages);
 
-  filedsForValidators.forEach((field) => {
+  fields.forEach((field) => {
     const element = document.getElementById(field.elementId);
     if (field.elementId === "location") {
       isValid = isFieldValid(displayRadioValue("location"), field.errorId) && isValid
