@@ -70,7 +70,6 @@ const displayRadioValue = (name) => {
  * Effacer les messages d'erreurs précédent
  */
 const deleteErrorsMessages = (errorId) => {
-
   errorId.forEach(id => {
     const element = document.getElementById(id);
     if (element) {
@@ -136,7 +135,7 @@ const isFieldValidWhenBlur = (fields) => {
 }
 
 // filtre de la liste fields
-const fieldsForBlur = fields.filter(field => !["checkbox1", "location"].includes(field.elementId));
+const fieldsForBlur = fields.slice(0, 5);
 isFieldValidWhenBlur(fieldsForBlur);
 
 /**
