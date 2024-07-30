@@ -31,7 +31,7 @@ const fields = [
   { elementId: "location", errorId: "location-error" }
 ];
 
-// Liste des élément pour la suppression des messages d'erreurs
+// Liste des éléments pour la suppression des messages d'erreurs
 const listOfElementForErrorsMessages = fields.map(field => field.errorId);
 
 // launch modal event
@@ -53,7 +53,7 @@ const closeModal = () => {
 /**
  * Permet de récupérer le radiobutton checké
  * @param name Nom des radiobutton
- * @returns Retourne le radiobutton sélectionné
+ * @returns Retourne le radiobutton sélectionné ou null
  */
 const displayRadioValue = (name) => {
   let element = document.getElementsByName(name);
@@ -68,6 +68,7 @@ const displayRadioValue = (name) => {
 
 /**
  * Effacer les messages d'erreurs précédent
+ * @param errorId ErrorId de suppression des 
  */
 const deleteErrorsMessages = (errorId) => {
   errorId.forEach(id => {
@@ -78,6 +79,7 @@ const deleteErrorsMessages = (errorId) => {
   });
 }
 
+// Liste des messages d'erreurs à afficher
 const errorMessages = {
   first: "Veuillez entrer 2 caractères ou plus pour le champ du prénom.",
   last: "Veuillez entrer 2 caractères ou plus pour le champ du nom.",
@@ -86,8 +88,9 @@ const errorMessages = {
   quantity: "Veuillez entrer une quantité valide (0-99).",
   checkbox1: "Veuillez accepter les conditions d'utilisation.",
   location: "Veuillez sélectionner une ville."
-};
+};  
 
+// Liste des validateurs
 const validators = {
   first: value => value.trim().length >= 2,
   last: value => value.trim().length >= 2,
@@ -99,7 +102,7 @@ const validators = {
 };
 
 /**
- * Permet de vérifier les champs
+ * Permet de vérifier si les champs sont valide
  * @param element L'élément à vérifier
  * @param errorId L'ID du span correspondant
  */
@@ -124,7 +127,7 @@ const isFieldValid = (element, errorId) => {
 };
 
 /**
- * Permet de verifier si le champs est valide lors du blur
+ * Permet de verifier si le champs est valide lors du blur (lors de la perte de focus)
  * @param fields tableau de champs de type [nom-element, nom-erreur]
  */
 const isFieldValidWhenBlur = (fields) => {
