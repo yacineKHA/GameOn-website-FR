@@ -20,6 +20,10 @@ const birthdate = document.getElementById("birthdate");
 const quantity = document.getElementById("quantity");
 const checkbox1 = document.getElementById("checkbox1");
 const checkbox2 = document.getElementById("checkbox2");
+const iconMenu = document.querySelector('.icon');
+const inscriptionForm = document.getElementById("inscription-form");
+const closeButtons = document.querySelectorAll('.close-button');
+
 
 const fields = [
   { elementId: "first", errorId: "first-error" },
@@ -31,8 +35,19 @@ const fields = [
   { elementId: "location", errorId: "location-error" }
 ];
 
-// Liste des éléments pour la suppression des messages d'erreurs
+// Liste des ID des span pour la suppression des messages d'erreurs
 const listOfElementForErrorsMessages = fields.map(field => field.errorId);
+
+// Liste des messages d'erreurs à afficher
+const errorMessages = {
+  first: "Veuillez entrer 2 caractères ou plus pour le champ du prénom.",
+  last: "Veuillez entrer 2 caractères ou plus pour le champ du nom.",
+  email: "Veuillez entrer une adresse email valide.",
+  birthdate: "Vous devez entrer votre date de naissance.",
+  quantity: "Veuillez entrer une quantité valide (0-99).",
+  checkbox1: "Veuillez accepter les conditions d'utilisation.",
+  location: "Veuillez sélectionner une ville."
+};  
 
 // launch modal event
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
@@ -50,6 +65,32 @@ const closeModal = () => {
   modalbg.style.display = "none";
 }
 
+
+/**
+ * Effacer les messages d'erreurs précédent
+ * @param errorId ErrorId de suppression des 
+ */
+const deleteErrorsMessages = (errorsId) => {
+  errorsId.forEach(id => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.textContent = "";
+    }
+  });
+}
+
+
+// Liste des validateurs
+const validators = {
+  first: value => value.trim().length >= 2,
+  last: value => value.trim().length >= 2,
+  email: value => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value),
+  birthdate: value => value !== "",
+  quantity: value => value !== "" && value >= 0 && value <= 99,
+  checkbox1: element => element.checked,
+  location: () => displayRadioValue("location") !== null
+};
+
 /**
  * Permet de récupérer le radiobutton checké
  * @param name Nom des radiobutton
@@ -65,41 +106,6 @@ const displayRadioValue = (name) => {
   }
   return null;
 }
-
-/**
- * Effacer les messages d'erreurs précédent
- * @param errorId ErrorId de suppression des 
- */
-const deleteErrorsMessages = (errorId) => {
-  errorId.forEach(id => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.textContent = "";
-    }
-  });
-}
-
-// Liste des messages d'erreurs à afficher
-const errorMessages = {
-  first: "Veuillez entrer 2 caractères ou plus pour le champ du prénom.",
-  last: "Veuillez entrer 2 caractères ou plus pour le champ du nom.",
-  email: "Veuillez entrer une adresse email valide.",
-  birthdate: "Vous devez entrer votre date de naissance.",
-  quantity: "Veuillez entrer une quantité valide (0-99).",
-  checkbox1: "Veuillez accepter les conditions d'utilisation.",
-  location: "Veuillez sélectionner une ville."
-};  
-
-// Liste des validateurs
-const validators = {
-  first: value => value.trim().length >= 2,
-  last: value => value.trim().length >= 2,
-  email: value => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(value),
-  birthdate: value => value !== "",
-  quantity: value => value !== "" && value >= 0 && value <= 99,
-  checkbox1: element => element.checked,
-  location: () => displayRadioValue("location") !== null
-};
 
 /**
  * Permet de vérifier si les champs sont valide
@@ -171,6 +177,16 @@ const validate = (event) => {
   }
 }
 
+// Validation du formulaire.
+inscriptionForm.addEventListener('submit', (event)=> validate(event));
+
+// Bouttons de fermeture du formulaire.
+closeButtons.forEach(function(button) {
+  button.addEventListener('click', ()=> closeModal());
+});
+
+// Ouverture menu nav.
+iconMenu.addEventListener('click', ()=> editNav());
 
 
 

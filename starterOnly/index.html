@@ -22,7 +22,7 @@
       <a href="#"><span>À propos</span></a>
       <a href="#"><span>Contact</span></a>
       <a href="#"><span>Évènements passés</span></a>
-      <a href="javascript:void(0);" class="icon" onclick="editNav()">
+      <a href="javascript:void(0);" class="icon">
         <i class="fa fa-bars"></i>
       </a>
     </div>
@@ -53,9 +53,9 @@
 
     <div class="bground">
       <div class="content">
-        <span onclick="closeModal();" class="close"></span>
+        <span class="close close-button"></span>
         <div class="modal-body">
-          <form name="reserve" action="index.html" method="get" onsubmit="return validate(event);">
+          <form id="inscription-form" name="reserve" action="index.html" method="get">
             <div class="formData">
               <label>Prénom</label><br>
               <input class="text-control" type="text" id="first" name="first" minlength="2" /><br>
@@ -119,9 +119,7 @@
                 J'ai lu et accepté les conditions d'utilisation.
               </label>
               <span class="error-message" id="conditions-error"></span>
-
               <br>
-
               <input class="checkbox-input" type="checkbox" id="checkbox2" />
               <label class="checkbox2-label" for="checkbox2">
                 <span class="checkbox-icon"></span>
@@ -129,7 +127,6 @@
               </label>
               <br>
             </div>
-
             <input class="btn-submit" type="submit" class="button" value="C'est parti" />
           </form>
         </div>
@@ -137,7 +134,7 @@
           <p>
             Merci pour votre inscription
           </p>
-          <button class="btn-submit" onclick="closeModal();">
+          <button class="btn-submit close-button">
             Fermer
           </button>
         </div>
